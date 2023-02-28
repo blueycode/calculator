@@ -13,6 +13,8 @@ const divide = document.querySelector(".divide");
 const multiply = document.querySelector(".multiply");
 const equals = document.querySelector(".equals");
 
+let res = 0;
+
 // Since in "btnNumbers" var we have multiple items, a foreach
 // is needed to apply the event listener to all of them.
 btnNumbers.forEach((btn) => {
@@ -46,17 +48,33 @@ multiply.addEventListener("click", (e) => {
 });
 
 equals.addEventListener("click", (e) => {
-    // We take the input under the "numbers" div
-    // and use it as a param for the eval function...
-    let result = eval(numbers.innerText);
-    panel.innerText = result;
-    numbers.innerText = "";
+    let result;
+    // Just to let you know, now we are building that feature
+    // where the previous operation can be used in "chain"...
+    
+    // Also, we are adding a validation to prevent the operation
+    // to start with an operator, such as "+" and "-". Look:
+    if (res && panel.innerText && ["+", "-", "/", "*"].includes(
+        numbers.innerHTML.charAt(0)
+    )) {
+        result = eval(res + numbers.innerText);
+    } else {
+        result = eval(numbers.innerText);
+    }
+
+    if (result) {
+        numbers.innerText = "";
+        panel.innerText = result;
+        // Remember "res" is our var that keeps storing our results
+        res = result;
+    }
 });
 
 // Now, the clean up buttons...
 clear.addEventListener("click", (e) => {
     numbers.innerText = "";
     panel.innerText = "0";
+    res = 0;
 });
 
 clearPanel.addEventListener("click", (e) => {
